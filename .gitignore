@@ -1,0 +1,12 @@
+# Arquivos do banco local
+dados.db
+
+# Cache do Streamlit
+.streamlit/
+
+# Pastas temporárias
+__pycache__/
+*.pyc
+
+# Configurações locais
+.env
