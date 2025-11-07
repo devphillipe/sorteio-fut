@@ -88,6 +88,16 @@ def carregar_sorteios():
     return df
 
 
+def resetar_avaliacoes():
+    """Zera médias e avaliações (mantém histórico de sorteios)."""
+    conn = sqlite3.connect(DB_FILE)
+    c = conn.cursor()
+    c.execute("DELETE FROM avaliacoes")
+    c.execute("UPDATE jogadores SET media = 0, total_avaliacoes = 0")
+    conn.commit()
+    conn.close()
+
+
 # -----------------------
 # Inicialização
 # -----------------------
@@ -95,7 +105,10 @@ init_db()
 
 st.title("⚽ Sorteador de Times - Avaliações Anônimas")
 
-menu = st.sidebar.radio("Navegação", ["Cadastrar Semana", "Avaliar Jogadores", "Sortear Times", "Histórico de Sorteios"])
+menu = st.sidebar.radio(
+    "Navegação",
+    ["Cadastrar Semana", "Avaliar Jogadores", "Sortear Times", "Histórico de Sorteios"]
+)
 
 # -----------------------
 # 1️⃣ Cadastrar Semana
@@ -115,6 +128,13 @@ if menu == "Cadastrar Semana":
 
     st.subheader("Jogadores atuais")
     st.dataframe(carregar_jogadores())
+
+    st.divider()
+    st.subheader("🔄 Resetar Avaliações")
+    st.warning("Isso apagará todas as notas e zerará as médias dos jogadores, mas manterá o histórico dos sorteios.")
+    if st.button("Resetar todas as avaliações"):
+        resetar_avaliacoes()
+        st.success("✅ Todas as avaliações foram resetadas com sucesso!")
 
 # -----------------------
 # 2️⃣ Avaliar Jogadores
