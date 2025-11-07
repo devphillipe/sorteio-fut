@@ -103,6 +103,7 @@ def resetar_avaliacoes():
 # -----------------------
 init_db()
 
+st.set_page_config(page_title="Sorteador de Times ⚽", page_icon="⚽", layout="centered")
 st.title("⚽ Sorteador de Times - Avaliações Anônimas")
 
 menu = st.sidebar.radio(
@@ -141,23 +142,21 @@ if menu == "Cadastrar Semana":
 # -----------------------
 elif menu == "Avaliar Jogadores":
     st.header("📝 Avaliação Anônima")
-    st.info("Avalie apenas os jogadores novos (sem média ainda).")
+    st.info("Avalie os jogadores anonimamente — várias pessoas podem avaliar ao mesmo tempo.")
 
     df_jogadores = carregar_jogadores()
-    novos = df_jogadores[df_jogadores["total_avaliacoes"] == 0]
 
-    if novos.empty:
-        st.success("✅ Nenhum jogador novo precisa ser avaliado.")
+    if df_jogadores.empty:
+        st.warning("Nenhum jogador cadastrado.")
     else:
-        st.write("Jogadores a serem avaliados:")
         avaliacoes = {}
-        for _, row in novos.iterrows():
-            avaliacoes[row["nome"]] = st.slider(f"{row['nome']}", 0, 10, 5)
+        for _, row in df_jogadores.iterrows():
+            avaliacoes[row["nome"]] = st.slider(f"{row['nome']}", 0, 10, 5, key=row["nome"])
 
         if st.button("Enviar avaliação"):
             for j, nota in avaliacoes.items():
                 registrar_avaliacao(j, nota)
-            st.success("Avaliações enviadas anonimamente com sucesso!")
+            st.success("✅ Avaliações enviadas anonimamente com sucesso!")
 
 # -----------------------
 # 3️⃣ Sortear Times
@@ -197,7 +196,7 @@ elif menu == "Sortear Times":
             st.write(f"Média Time B: {media_b:.2f}")
 
 # -----------------------
-# 4️⃣ Histórico
+# 4️⃣ Histórico de Sorteios
 # -----------------------
 elif menu == "Histórico de Sorteios":
     st.header("📜 Histórico de Sorteios")
