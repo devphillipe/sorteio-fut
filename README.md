@@ -12,8 +12,3 @@ Aplicativo em **Streamlit** para gerenciar avaliações anônimas de jogadores e
 ✅ Sorteio equilibrado de times  
 ✅ Histórico completo dos sorteios realizados  
 ✅ Banco de dados local SQLite (sem dependências externas)
-
----
-
-## 🧱 Estrutura do Projeto
-
